@@ -1,6 +1,6 @@
-export { default as BrowserCheckpointService } from "./BrowserCheckpointService.js";
-export { default as BrowserChatHistoryService } from "./BrowserChatHistoryService.js";
-export { default as BrowserChatMessageStorage } from "./BrowserChatMessageStorage.js";
+export { default as BrowserCheckpointService } from "./BrowserCheckpointService.ts";
+export { default as BrowserChatHistoryService } from "./BrowserChatHistoryService.ts";
+export { default as BrowserChatMessageStorage } from "./BrowserChatMessageStorage.ts";
 
 export const name = "@token-ring/browser-chat-storage";
 export const description =
