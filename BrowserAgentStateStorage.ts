@@ -4,6 +4,7 @@ import type {
 	NamedAgentCheckpoint,
 	StoredAgentCheckpoint,
 } from "@tokenring-ai/agent/AgentCheckpointProvider";
+import { TokenRingService } from "@tokenring-ai/agent/types";
 
 const DEFAULT_AGENT_STATE_PREFIX = "tokenRingAgentState_v1_";
 
