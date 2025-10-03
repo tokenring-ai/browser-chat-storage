@@ -6,6 +6,7 @@ This package provides browser-based implementations backed by `localStorage` for
 - Chat history and sessions (BrowserChatHistoryService)
 - Conversation checkpoints (BrowserCheckpointService)
 - A lightweight message store compatible with `ChatMessageStorage` (BrowserChatMessageStorage)
+- Agent state checkpoints (BrowserAgentStateStorage)
 
 It is designed for client-side persistence in web apps, without a backend database.
 
@@ -38,6 +39,7 @@ import {
   BrowserChatHistoryService,
   BrowserCheckpointService,
   BrowserChatMessageStorage,
+  BrowserAgentStateStorage,
 } from "@token-ring/browser-chat-storage";
 
 // History: manage sessions and per-session messages
@@ -62,6 +64,17 @@ const stored = await messageStore.storeChat(
   /* request */ { messages: [{ role: "user", content: "Hi there" }] },
   /* response */ { content: "Hello! How can I help?" },
 );
+
+// Agent state storage: store and retrieve agent checkpoints
+const agentStorage = new BrowserAgentStateStorage("myApp_"); // optional prefix
+const checkpointId = await agentStorage.storeCheckpoint({
+  agentId: "agent-123",
+  name: "After processing step 1",
+  state: { currentStep: 1, data: { foo: "bar" } },
+  createdAt: Date.now(),
+});
+const checkpoint = await agentStorage.retrieveCheckpoint(checkpointId);
+const allCheckpoints = await agentStorage.listCheckpoints();
 ```
 
 ## API overview
@@ -113,6 +126,20 @@ Storage operations
 - `retrieveAllSessions(): Promise<any[]>`
 - `clearAllData(): Promise<void>` — removes sessions, messages, and counters and re-initializes the store
 
+### BrowserAgentStateStorage
+
+Implements `AgentCheckpointProvider` from `@tokenring-ai/agent`.
+
+Constructor
+- `new BrowserAgentStateStorage(storageKeyPrefix?: string)` — prefixes checkpoint keys with the provided prefix
+
+Checkpoint operations
+- `storeCheckpoint(checkpoint: NamedAgentCheckpoint): Promise<string>` — stores a checkpoint and returns its ID
+- `retrieveCheckpoint(checkpointId: string): Promise<StoredAgentCheckpoint | null>` — retrieves a checkpoint by ID
+- `listCheckpoints(): Promise<AgentCheckpointListItem[]>` — lists all checkpoints (newest first)
+- `deleteCheckpoint(checkpointId: string): Promise<boolean>` — deletes a specific checkpoint
+- `clearAllCheckpoints(): Promise<void>` — removes all checkpoints
+
 ## Storage layout (localStorage keys)
 
 Exact keys depend on the constructor options:
@@ -128,6 +155,9 @@ BrowserChatMessageStorage (prefix defaults to `chat_`)
 - Sessions: `{storagePrefix}sessions`
 - Messages: `{storagePrefix}messages`
 - Counters: `{storagePrefix}counters` with `{ sessionId, messageId }`
+
+BrowserAgentStateStorage (prefix defaults to `tokenRingAgentState_v1_`)
+- All checkpoints: `{storageKeyPrefix}checkpoints`
 
 ## Limitations
 

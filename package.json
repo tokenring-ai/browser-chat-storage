@@ -1,16 +1,12 @@
 {
-	"name": "@token-ring/browser-chat-storage",
-	"description": "Provides browser-based chat history and checkpoint services using localStorage.",
+	"name": "@tokenring-ai/browser-agent-storage",
+	"description": "Provides browser-based agent state storage for the TokenRing ecosystem.",
 	"version": "0.1.0",
 	"dependencies": {
-		"@token-ring/chat": "0.1.0",
-		"@token-ring/filesystem": "0.1.0",
-		"@token-ring/history": "0.1.0",
-		"@token-ring/registry": "0.1.0",
-		"@token-ring/eslint-config": "0.0.0"
+		"@tokenring-ai/agent": "0.1.0"
 	},
 	"license": "MIT",
-	"main": "index.js",
+	"main": "index.ts",
 	"type": "module",
 	"scripts": {
 		"eslint": "eslint --fix ./"
